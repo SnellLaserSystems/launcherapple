@@ -70,9 +70,15 @@ class MainActivity : ComponentActivity() {
                                     onSettingsClick = { navController.navigate("settings") },
                                     onWidgetsClick = { navController.navigate("widgets") },
                                     onAppClick = { app ->
+                                        Log.d("MainActivity", "App click detected: ${app.label}")
+                                        // Direct launch without animation for testing
+                                        viewModel.launchApp(this@MainActivity, app.packageName)
+
+                                        // If you want to enable animation later:
+                                        /*
                                         selectedApp = app
                                         appOpeningAnimation = true
-                                        // The actual app launch happens after animation completes
+                                        */
                                     }
                                 )
 
@@ -111,6 +117,6 @@ class MainActivity : ComponentActivity() {
         super.onResume()
         Log.d("MainActivity", "onResume called")
         // Refresh app list when returning to launcher
-        viewModel.loadApps()
+        viewModel.loadApps(this)
     }
 }

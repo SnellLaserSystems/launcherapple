@@ -18,6 +18,10 @@ class LauncherViewModel @Inject constructor(
     private val appRepository: AppRepository
 ) : ViewModel() {
 
+    // Loading state
+    private val _isLoading = mutableStateOf(true)
+    val isLoading = _isLoading
+
     // Apps for the home screen
     private val _homeScreenApps = mutableStateListOf<AppInfo>()
     val homeScreenApps: List<AppInfo> = _homeScreenApps
@@ -47,6 +51,7 @@ class LauncherViewModel @Inject constructor(
     }
 
     fun loadApps(context: Context) {
+        _isLoading.value = true
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val apps = appRepository.getAllApps()
@@ -63,6 +68,8 @@ class LauncherViewModel @Inject constructor(
                 val homeApps = apps.filter { !it.isDockApp }.take(20)
                 _homeScreenApps.clear()
                 _homeScreenApps.addAll(homeApps)
+
+                _isLoading.value = false
             }
         }
     }

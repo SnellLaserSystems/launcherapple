@@ -36,6 +36,7 @@ fun DraggableItem(
 ) {
     var offsetX by remember { mutableStateOf(0f) }
     var offsetY by remember { mutableStateOf(0f) }
+    var wasDragged by remember { mutableStateOf(false) }
 
     val scale by animateFloatAsState(
         targetValue = if (isDragging) 1.2f else 1f,
@@ -53,11 +54,15 @@ fun DraggableItem(
             .pointerInput(item) {
                 detectDragGestures(
                     onDragStart = {
+                        wasDragged = false
                         onDragStart(index)
                     },
                     onDragEnd = {
                         offsetX = 0f
                         offsetY = 0f
+                        if (!wasDragged) {
+                            onClick()
+                        }
                         onDragEnd()
                     },
                     onDragCancel = {
@@ -69,10 +74,9 @@ fun DraggableItem(
                         change.consume()
                         offsetX += dragAmount.x
                         offsetY += dragAmount.y
+                        wasDragged = true
 
                         // Calculate target position based on drag distance
-                        // This is a simplified approach - real implementation would
-                        // calculate grid positions based on touch coordinates
                         val dragDistance = Offset(offsetX, offsetY).getDistanceSquared()
                         if (dragDistance > 5000) {  // Threshold for position change
                             val targetIndex = when {

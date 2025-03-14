@@ -1,6 +1,5 @@
 package com.example.launcherapple.util
 
-
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
@@ -34,13 +33,13 @@ class LauncherSettings @Inject constructor(@ApplicationContext context: Context)
         pageApps.forEach { (page, apps) ->
             val appsString = apps.joinToString(",")
             prefs.edit {
-                putString("$KEY_HOME_SCREEN_$page", appsString)
+                putString(KEY_HOME_SCREEN + "_" + page, appsString)
             }
         }
     }
 
     fun getHomeScreenLayout(page: Int): List<String> {
-        val appsString = prefs.getString("$KEY_HOME_SCREEN_$page", null)
+        val appsString = prefs.getString(KEY_HOME_SCREEN + "_" + page, null)
         return appsString?.split(",") ?: emptyList()
     }
 

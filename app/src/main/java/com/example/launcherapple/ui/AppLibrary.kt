@@ -2,6 +2,7 @@ package com.example.launcherapple.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,6 +38,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -65,6 +67,24 @@ fun AppLibrary(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background.copy(alpha = 0.95f))
             .clickable(onClick = onDismiss)
+            .pointerInput(Unit) {
+                var startY = 0f
+                detectDragGestures(
+                    onDragStart = { offset ->
+                        startY = offset.y
+                    },
+                    onDragEnd = {
+                        // Do nothing on drag end by itself
+                    },
+                    onDrag = { change, dragAmount ->
+                        change.consume()
+                        // Dismiss on significant downward swipe
+                        if (change.position.y - startY > 100) {
+                            onDismiss()
+                        }
+                    }
+                )
+            }
             .padding(top = 48.dp)
     ) {
         Column(
@@ -194,75 +214,6 @@ fun AppLibrary(
 }
 
 @Composable
-fun AppLibraryCategorized(
-    apps: List<AppInfo>,
-    onAppClick: (AppInfo) -> Unit
-) {
-    // Group apps by category
-    val groupedApps = remember(apps) {
-        apps.groupBy { it.category }
-    }
+fun AppLibraryCategorized(apps: List<AppInfo>, onAppClick: (AppInfo) -> Unit) {
 
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp),
-        contentPadding = PaddingValues(8.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        groupedApps.forEach { (category, appsInCategory) ->
-            item(span = { GridItemSpan(2) }) {
-                Text(
-                    text = category,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp)
-                )
-            }
-
-            // Display up to 8 apps per category in the grid
-            val displayApps = appsInCategory.take(8)
-            items(displayApps) { app ->
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.5f))
-                        .padding(8.dp)
-                ) {
-                    AppIcon(
-                        app = app,
-                        onClick = { onAppClick(app) },
-                        onLongClick = { /* No long-press action in library */ }
-                    )
-                }
-            }
-
-            // "See All" option if there are more apps
-            if (appsInCategory.size > 8) {
-                item {
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(16.dp))
-                            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.5f))
-                            .clickable { /* Open full category view */ }
-                            .padding(8.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "See All",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                }
-            }
-
-            // Add a spacer after each category
-            item(span = { GridItemSpan(2) }) {
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-        }
-    }
 }

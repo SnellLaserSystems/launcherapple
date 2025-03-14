@@ -1,6 +1,7 @@
 package com.example.launcherapple.ui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,19 +38,15 @@ fun AppIcon(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.padding(4.dp)
+        modifier = modifier
+            .padding(4.dp)
+            .clickable(onClick = onClick) // Add a clickable modifier to the entire column
     ) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .size(iconSize)
                 .clip(RoundedCornerShape(12.dp))
-                .pointerInput(app) {
-                    detectTapGestures(
-                        onLongPress = { onLongClick() },
-                        onTap = { onClick() }
-                    )
-                }
         ) {
             // Convert drawable to ImageBitmap
             val bitmap = remember(app.icon) {
