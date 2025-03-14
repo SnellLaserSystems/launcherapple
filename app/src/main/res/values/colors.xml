@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ios_blue">#007AFF</color>
+    <color name="ios_blue_dark">#0A84FF</color>
+    <color name="ios_purple">#5856D6</color>
+    <color name="ios_red">#FF2D55</color>
+    <color name="ios_red_dark">#FF375F</color>
+    <color name="ios_green">#34C759</color>
+    <color name="ios_orange">#FF9500</color>
+    <color name="ios_yellow">#FFCC00</color>
+    <color name="ios_gray_1">#8E8E93</color>
+    <color name="ios_gray_2">#AEAEB2</color>
+    <color name="ios_gray_3">#C7C7CC</color>
+    <color name="ios_gray_4">#D1D1D6</color>
+    <color name="ios_gray_5">#E5E5EA</color>
+    <color name="ios_gray_6">#F2F2F7</color>
+    <color name="ios_background_light">#F2F2F7</color>
+    <color name="ios_background_dark">#000000</color>
+    <color name="ios_surface_light">#FFFFFF</color>
+    <color name="ios_surface_dark">#1C1C1E</color>
+    <color name="ios_on_background_light">#1C1C1E</color>
+    <color name="ios_on_background_dark">#FFFFFF</color>
+</resources>
